@@ -1,0 +1,10 @@
+[package]
+name = "hVAE_rs"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+burn = {path = "../../../builds/burn/crates/burn"}
+burn-import = {path = "../../../builds/burn/crates/burn-import"}
+burn-ndarray = {path = "../../../builds/burn/crates/burn-ndarray"}
+plotpy = "1.21.0"
