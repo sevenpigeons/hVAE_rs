@@ -184,13 +184,22 @@ fn main() {
     let (rec,mu,var_log,z) = model.forward(mnist_number.clone());
 
 
+    let mut orig = Image::new();
     let mut img = Image::new();
     //img.set_colormap_name("gray").draw(&imager(mnist_number.clone().reshape([28,28])));
-    img.set_colormap_name("gray").draw(&imager(rec[0].clone().reshape([28,28])));
 
-    let mut plot = Plot::new();
-    plot.add(&img);
-    plot.show("num");
+    img.set_colormap_name("gray").draw(&imager(rec[0].clone().reshape([28,28])));
+    orig.set_colormap_name("gray").draw(&imager(mnist_number.clone().reshape([28,28])));
+
+    let mut plot = Plot::new() ;
+    plot.set_subplot(2, 3, 2).set_title("original").add(&orig);
+    //let _ = plot.show("num");
+    plot.set_subplot(2, 3, 4).set_title("reconstruction 1").add(&img);
+    img.set_colormap_name("gray").draw(&imager(rec[1].clone().reshape([28,28])));
+    plot.set_subplot(2, 3, 5).set_title("reconstruction 2").add(&img);
+    img.set_colormap_name("gray").draw(&imager(rec[2].clone().reshape([28,28])));
+    plot.set_subplot(2, 3, 6).set_title("reconstruction 3").add(&img);
+    let _ = plot.show("num");
 
 }
 
