@@ -1,15 +1,14 @@
 use burn::{prelude::*, tensor::activation::{relu, sigmoid}};
 
-
 #[derive(Module,Debug)]
-pub struct Encoder<B: Backend> {
+struct Encoder<B: Backend> {
     encoder_list: Vec<nn::Linear<B>>,
     mu_var_layer: nn::Linear<B>,
     features: usize
 }
 
 #[derive(Module,Debug)]
-pub struct Decoder<B: Backend> {
+struct Decoder<B: Backend> {
     decoder_list: Vec<nn::Linear<B>>,
     mean_layer: nn::Linear<B>,
 }
@@ -22,6 +21,8 @@ pub struct hVAE<B:Backend> {
     decoders: Vec<Decoder<B>>
 
 }
+
+
 
 
 impl <B:Backend> hVAE<B> {

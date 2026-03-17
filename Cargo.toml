@@ -3,8 +3,25 @@ name = "hVAE_rs"
 version = "0.1.0"
 edition = "2024"
 
+[lib]
+crate-type = ["cdylib"]
+
+[features]
+
+default = ["ndarray"]
+
+ndarray = ["burn/ndarray"]
+wgpu = ["burn/wgpu"]
+
 [dependencies]
 burn = {path = "../../../builds/burn/crates/burn"}
 burn-import = {path = "../../../builds/burn/crates/burn-import"}
 burn-ndarray = {path = "../../../builds/burn/crates/burn-ndarray"}
-plotpy = "1.21.0"
+burn-wgpu = {path = "../../../builds/burn/crates/burn-wgpu"}
+
+console_error_panic_hook = "0.1.7"
+getrandom = { version = "0.4.2", default-features = false, features = ["wasm_js"] }
+js-sys = "0.3.91"
+serde = "1.0.228"
+wasm-bindgen = "0.2.114"
+wasm-bindgen-futures = "0.4.64"

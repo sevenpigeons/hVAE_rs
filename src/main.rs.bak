@@ -1,7 +1,7 @@
 use burn::record::{FullPrecisionSettings, HalfPrecisionSettings, PrecisionSettings, Recorder};
 use burn::prelude::*;
 use burn_import::pytorch::PyTorchFileRecorder;
-mod model;
+pub mod model;
 use burn::prelude::Module;
 
 use plotpy::{Image, Plot};
