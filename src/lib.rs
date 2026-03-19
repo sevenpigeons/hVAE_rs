@@ -1,3 +1,5 @@
 pub mod model;
 pub mod state;
-mod web;
+pub mod web;
+
+extern crate alloc;

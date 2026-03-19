@@ -1,4 +1,6 @@
 use burn::Tensor;
+use alloc::string::String;
+use burn::tensor::TensorData;
 use js_sys::Array;
 
 #[cfg(target_family = "wasm")]
@@ -40,7 +42,7 @@ impl Mnist {
         let (reconstructions,mu,log_var,z) = model.forward(tensor_input);
 
 
-        let output = reconstructions[2].clone().into_data_async().await.unwrap();
+        let output:TensorData = reconstructions[2].clone().into_data_async().await.unwrap();
         let array = Array::new();
         for value in output.iter::<f32>() {
             array.push(&value.into());

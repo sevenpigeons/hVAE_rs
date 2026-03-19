@@ -1,22 +1,23 @@
+use std::vec;
+
 use burn::{prelude::*, tensor::activation::{relu, sigmoid}};
 
 #[derive(Module,Debug)]
-struct Encoder<B: Backend> {
+pub struct Encoder<B: Backend> {
     encoder_list: Vec<nn::Linear<B>>,
     mu_var_layer: nn::Linear<B>,
     features: usize
 }
 
 #[derive(Module,Debug)]
-struct Decoder<B: Backend> {
+pub struct Decoder<B: Backend> {
     decoder_list: Vec<nn::Linear<B>>,
     mean_layer: nn::Linear<B>,
 }
 
 
-#[allow(nonstandard_style)]
 #[derive(Module,Debug)]
-pub struct hVAE<B:Backend> {
+pub struct hVAE<B: Backend> {
     encoder: Encoder<B>,
     decoders: Vec<Decoder<B>>
 
