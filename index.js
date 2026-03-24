@@ -14,9 +14,38 @@
  * @param {object} cropContext - The 2d context of an intermediate hidden canvas.
  * @param {object} scaledContext - The 2d context of the destination 28x28 canvas.
  */
+
+export function draw_square(d0Context,d1Context,d2Context,inf_out) {
+    const canv0El = d0Context.canvas;
+    const canv1El = d1Context.canvas;
+    const canv2El = d2Context.canvas;
+    let width = canv0El.width;
+    let height = canv0El.height;
+    let ratio = width/28;
+    for (let i = 0;i<28;i++) {
+    for (let j = 0;j<28;j++) {
+         let   index = (j * 28 + i);
+            let value0 = inf_out[0][index]*255;
+            let value1 = inf_out[1][index]*255;
+            let value2 = inf_out[2][index]*255;
+    d0Context.fillStyle = `rgb(${value0},${value0},${value0})`; // white non-transparent color
+    d0Context.fillRect(i*ratio, j*ratio, ratio, ratio);
+            
+    d1Context.fillStyle = `rgb(${value1},${value1},${value1})`; // white non-transparent color
+    d1Context.fillRect(i*ratio, j*ratio, ratio, ratio);
+
+    d2Context.fillStyle = `rgb(${value2},${value2},${value2})`; // white non-transparent color
+    d2Context.fillRect(i*ratio, j*ratio, ratio, ratio);
+        }
+
+    }
+
+}
+
 export function cropScaleGetImageData(mainContext, cropContext, scaledContext) {
 
     const cropEl = cropContext.canvas;
+    
 
     // Get the auto-cropped image data and put into the intermediate/hidden canvas
     cropContext.fillStyle = "rgba(255, 255, 255, 255)"; // white non-transparent color
@@ -38,9 +67,10 @@ export function cropScaleGetImageData(mainContext, cropContext, scaledContext) {
     scaledContext.drawImage(cropEl, 0, 0);
 
     // Extract image data and convert into single value (greyscale) array
-    const data = rgba2gray(scaledContext.getImageData(0, 0, 28, 28).data);
+    let data = rgba2gray(scaledContext.getImageData(0, 0, 28, 28).data);
     scaledContext.restore();
 
+    //console.log(data);
     return data;
 }
 
@@ -56,11 +86,15 @@ export function rgba2gray(data) {
         let r = 255 - data[i];     // red
         let g = 255 - data[i + 1]; // green
         let b = 255 - data[i + 2]; // blue
+      //  let r = data[i];     // red
+      //  let g = data[i + 1]; // green
+      //  let b = data[i + 2]; // blue
         let a = 255 - data[i + 3]; // alpha
 
         // Use RGB grayscale coefficients (https://imagej.nih.gov/ij/docs/menus/image.html)
+        // it returns 0..255 vector i dont understand how this works with the model that ingests 0..1 ?????
         let y = 0.299 * r + 0.587 * g + 0.114 * b;
-        converted[i / 4] = y; // 4 times fewer data points but the same number of pixels.
+        converted[i / 4] = y ; // 4 times fewer data points but the same number of pixels.
     }
     return converted;
 }

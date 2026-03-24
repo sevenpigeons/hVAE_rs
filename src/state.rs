@@ -15,7 +15,7 @@ pub type Backend = Wgpu<f32,i32>;
 
 
 #[cfg(all(feature = "ndarray", not(feature = "wgpu")))]
-pub type Backend = burn::backend::ndarray::NdArray<f64>;
+pub type Backend = burn::backend::ndarray::NdArray<f32>;
 
 
 

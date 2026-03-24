@@ -55,11 +55,13 @@
       <tr>
         <th>Draw a digit here</th>
         <th>Cropped and scaled</th>
-        <th>Probability result</th>
+        <th>Decoder 1</th>
+        <th>Decoder 2</th>
+        <th>Decoder 3</th>
       </tr>
       <tr>
         <td>
-          <canvas id="main-canvas" width="300" height="300" style="border: 1px solid #aaa"></canvas>
+          <canvas id="main-canvas" width="308" height="308" style="border: 1px solid #aaa"></canvas>
         </td>
         <td>
           <canvas
@@ -70,9 +72,18 @@
           ></canvas>
           <canvas id="crop-canvas" width="28" height="28" style="display: none"></canvas>
         </td>
-        <td>
-          <canvas id="chart" style="border: 1px solid #aaa; width: 600px; height: 300px"></canvas>
-        </td>
+                <td>
+
+          <canvas id="canvas-d0" width="308" height="308" style="border: 1px solid #aaa"></canvas>
+                </td>
+                <td>
+
+          <canvas id="canvas-d1" width="308" height="308" style="border: 1px solid #aaa"></canvas>
+                </td>
+                <td>
+
+          <canvas id="canvas-d2" width="308" height="308" style="border: 1px solid #aaa"></canvas>
+                </td>
       </tr>
       <tr>
         <td><button id="clear">Clear</button></td>
@@ -84,16 +95,21 @@
     <div></div>
 
     <script type="module">
-      import { $, cropScaleGetImageData, toFixed, chartConfigBuilder } from "./index.js";
+      import { $, cropScaleGetImageData, toFixed, chartConfigBuilder, draw_square } from "./index.js";
 
       import { default as wasm, Mnist } from "./pkg/hVAE_rs.js";
 
-      const chart = chartConfigBuilder($("chart"));
 
       const mainCanvasEl = $("main-canvas");
+      const d0CanvasEl = $('canvas-d0');
+      const d1CanvasEl = $('canvas-d1');
+      const d2CanvasEl = $('canvas-d2');
       const scaledCanvasEl = $("scaled-canvas");
       const cropEl = $("crop-canvas");
       const mainContext = mainCanvasEl.getContext("2d", { willReadFrequently: true });
+      const d0Context = d0CanvasEl.getContext("2d",{willReadFrequently: true});
+      const d1Context = d1CanvasEl.getContext("2d",{willReadFrequently: true});
+      const d2Context = d2CanvasEl.getContext("2d",{willReadFrequently: true});
       const cropContext = cropEl.getContext("2d", { willReadFrequently: true });
       const scaledContext = scaledCanvasEl.getContext("2d", { willReadFrequently: true });
 
@@ -112,8 +128,6 @@
         mainContext.clearRect(0, 0, mainCanvasEl.width, mainCanvasEl.height);
         scaledContext.clearRect(0, 0, scaledCanvasEl.width, scaledCanvasEl.height);
 
-        chart.data.datasets[0].data = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
-        chart.update();
       };
 
       let timeoutId;
@@ -129,9 +143,10 @@
             isTimeOutSet = true;
             fabricCanvas.freeDrawingBrush._finalizeAndAddPath();
             const data = cropScaleGetImageData(mainContext, cropContext, scaledContext);
+                  console.log(data);
             const output = await mnist.inference(data);
 
-            console.log(output[130]);
+            draw_square(d0Context,d1Context,d2Context,output);
             //chart.data.datasets[0].data = output;
             //chart.update();
             isTimeOutSet = false;
